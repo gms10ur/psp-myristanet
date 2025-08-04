@@ -19,15 +19,9 @@ t('title') }}{% endblock %} {% block content %}
     <tr>
       <td>
         {% if entry.icon_path %}
-        <img
-          src="{{ get_localized_icon(entry.icon_path) }}"
-          alt="{{ entry.title }}"
-        />
+        <img src="{{ entry.icon_path }}" alt="{{ entry.title }}" />
         {% else %}
-        <img
-          src="{{ get_localized_icon('/images/empty_button.png') }}"
-          alt="{{ entry.title }}"
-        />
+        <img src="/images/empty_button.png" alt="{{ entry.title }}" />
         {% endif %}
       </td>
       <td style="text-align: left">
@@ -36,7 +30,7 @@ t('title') }}{% endblock %} {% block content %}
       <td>{{ entry.file_size or 'N/A' }}</td>
       <td>
         <a href="{{ url_for('download_file', entry_id=entry.id) }}">
-          <img src="{{ get_localized_icon('/images/dl.png') }}" alt="İndir" />
+          <img src="/images/dl.png" alt="İndir" />
         </a>
       </td>
     </tr>
@@ -49,7 +43,7 @@ t('title') }}{% endblock %} {% block content %}
   {% for entry in entries %}
   <div class="entry-item">
     <img
-      src="{% if entry.icon_path %}{{ entry.icon_path }}{% else %}{{ get_localized_icon('/images/empty_button.png') }}{% endif %}"
+      src="{% if entry.icon_path %}{{ entry.icon_path }}{% else %}/images/empty_button.png{% endif %}"
       alt="{{ entry.title }}"
       class="entry-icon"
     />
@@ -71,7 +65,7 @@ t('title') }}{% endblock %} {% block content %}
       href="{{ url_for('download_file', entry_id=entry.id) }}"
       class="entry-download"
     >
-      <img src="{{ get_localized_icon('/images/dl.png') }}" alt="İndir" />
+      <img src="/images/dl.png" alt="İndir" />
     </a>
   </div>
   {% endfor %}

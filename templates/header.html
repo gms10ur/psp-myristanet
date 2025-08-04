@@ -31,17 +31,21 @@
       .nav {
         text-align: right;
         vertical-align: middle;
+        padding-right: 5px; /* Sol taraftaki title ile aynı mesafe */
       }
 
       button {
         height: 16px; /* Smaller for PSP */
-        width: 35px; /* Smaller for PSP */
-        font-size: 9px; /* Smaller for PSP */
+        width: 40px; /* "ana" yazısı için yeterli */
+        font-size: 9px; /* Normal font size */
         margin-left: 2px;
         background-color: {{ colors.primary }};
         color: {{ colors.secondary }};
         border: 1px solid {{ colors.primary }};
         cursor: pointer;
+        white-space: nowrap; /* Yazının alt satıra geçmesini engelle */
+        overflow: hidden; /* Taşan kısmı gizle */
+        text-overflow: ellipsis; /* ... ile göster */
       }
 
       button:hover {
@@ -84,8 +88,8 @@
       <tr>
         <td class="title">MyristaNet PSP Portal</td>
         <td class="nav">
-          <button onclick="window.parent.location='{{ url_for('main') }}'">
-            {{ t('home') }}
+          <button onclick="window.parent.location='{{ url_for('index') }}'">
+            {{ 'EV' if lang == 'tr' else 'HOME' }}
           </button>
           <span class="lang-switcher">
             <a 

@@ -5,21 +5,10 @@
 <div class="category-grid">
   {% for category in categories %}
   <div class="category-item">
-    {% if category.slug == 'homebrew' %}
-    <a href="https://brew.psp.place/hb/" target="_parent">
-      <img
-        src="{{ get_localized_icon(category.icon) }}"
-        alt="{{ t(category.slug) }}"
-      />
-    </a>
-    {% else %}
     <a href="{{ url_for('category_detail', slug=category.slug) }}">
-      <img
-        src="{{ get_localized_icon(category.icon) }}"
-        alt="{{ t(category.slug) }}"
-      />
+      <img src="{{ category.icon }}" alt="{{ t(category.slug) }}" />
+      <span>{{ t(category.slug) }}</span>
     </a>
-    {% endif %}
   </div>
   {% endfor %}
 </div>

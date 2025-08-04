@@ -32,49 +32,37 @@
       .category-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(4, 1fr); /* 4 satır için */
-        gap: 8px; /* Biraz daha fazla boşluk */
-        padding: 8px;
-        max-width: 470px; /* Genişletildi */
-        height: 260px; /* Sabit yükseklik */
+        gap: 5px;
+        padding: 5px;
+        max-width: 450px;
         margin: 0 auto;
       }
 
       .category-item {
         text-align: center;
-        background-color: transparent; /* Arka plan şeffaf */
-        border: none; /* Çerçeve kaldırıldı */
-        border-radius: 0; /* Köşe yuvarlaklığı kaldırıldı */
-        padding: 0; /* Padding kaldırıldı */
-        transition: opacity 0.2s; /* Hover efektini opacity ile değiştirdik */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        background-color: rgba(8, 217, 214, 0.1);
+        border: 1px solid {{ colors.secondary }};
+        border-radius: 3px;
+        padding: 3px;
+        transition: background-color 0.2s;
       }
 
       .category-item:hover {
-        opacity: 0.8; /* Hover'da hafif saydam */
+        background-color: rgba(8, 217, 214, 0.3);
       }
 
       .category-item img {
-        width: 90%; /* Resmi %90 boyutuna çıkar, daha az boşluk */
-        height: 90%; /* Yüksekliği de %90 yap */
-        max-height: none; /* Maximum yükseklik sınırını kaldır */
+        width: 48px;
+        height: 27px;
         display: block;
-        margin: auto; /* Ortala */
-        object-fit: contain; /* Resmin tamamını göster, kırpma */
-        border-radius: 4px; /* Sadece resme hafif köşe yuvarlaklığı */
+        margin: 0 auto 2px auto;
       }
 
       .category-item a {
         text-decoration: none;
         color: {{ colors.light }};
-        font-size: 8px; /* Daha küçük yazı */
-        display: block; /* Block yaparak tam boyutlu link */
-        height: 100%;
-        width: 100%;
-        line-height: 1.1;
+        font-size: 10px;
+        display: block;
       }
 
       /* Flash messages */

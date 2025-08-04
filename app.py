@@ -19,10 +19,12 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-key-change-this")
 
 # Renk paleti konfigürasyonu
 COLOR_PALETTE = {
-    "primary": os.environ.get("COLOR_PRIMARY", "#08D9D6"),  # Ana renk (turkuaz)
+    "primary": os.environ.get(
+        "COLOR_PRIMARY", "#252A34"
+    ),  # Ana renk (koyu gri) - eski secondary
     "secondary": os.environ.get(
-        "COLOR_SECONDARY", "#252A34"
-    ),  # İkincil renk (koyu gri)
+        "COLOR_SECONDARY", "#08D9D6"
+    ),  # İkincil renk (turkuaz) - eski primary
     "accent": os.environ.get("COLOR_ACCENT", "#FF2E63"),  # Vurgu rengi (pembe-kırmızı)
     "light": os.environ.get("COLOR_LIGHT", "#EAEAEA"),  # Açık renk (açık gri)
 }
@@ -48,7 +50,7 @@ db = SQLAlchemy(app)
 TRANSLATIONS = {
     "tr": {
         "title": "PSP Portal",
-        "home": "ana sayfa",
+        "home": "Ev",
         "firmware": "Firmware",
         "games": "Oyunlar",
         "plugins": "Eklentiler",
@@ -148,6 +150,21 @@ def get_translation(lang, key):
     return TRANSLATIONS.get(lang, TRANSLATIONS["tr"]).get(key, key)
 
 
+def get_localized_icon(base_icon, lang):
+    """Dil bazlı ikon döndür"""
+    if lang == "tr":
+        # _tr versiyonu olup olmadığını kontrol et
+        base_name = base_icon.replace("/images/", "").replace(".png", "")
+        tr_icon = f"/images/{base_name}_tr.png"
+        # Dosya var mı kontrol et
+        import os
+
+        tr_path = os.path.join("images", f"{base_name}_tr.png")
+        if os.path.exists(tr_path):
+            return tr_icon
+    return base_icon
+
+
 def init_db():
     """Veritabanını başlat ve örnek veriler ekle"""
     db.create_all()
@@ -164,7 +181,7 @@ def init_db():
             {
                 "name": "Games",
                 "slug": "games",
-                "icon": "/images/pdc.png",
+                "icon": "/images/games.png",
                 "order_index": 2,
             },
             {
@@ -236,6 +253,7 @@ def inject_globals():
         "colors": COLOR_PALETTE,
         "t": lambda k: get_translation(request.lang, k),
         "lang": request.lang,
+        "get_localized_icon": lambda icon: get_localized_icon(icon, request.lang),
     }
 
 
@@ -649,4 +667,5 @@ def serve_static(filename):
 if __name__ == "__main__":
     with app.app_context():
         init_db()
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    port = int(os.environ.get("PORT", 5001))  # Default port 5001
+    app.run(host="0.0.0.0", port=port, debug=True)

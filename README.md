@@ -35,7 +35,7 @@ cd psp-myristanet
 docker-compose up -d
 ```
 
-3. Portal `http://localhost:5000` adresinde çalışacaktır
+3. Portal `http://localhost:5001` adresinde çalışacaktır
 
 ### Manuel Kurulum
 
