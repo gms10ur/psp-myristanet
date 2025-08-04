@@ -1,22 +1,47 @@
 name: psp-portal
 services:
   app:
-    build: .
+    image: gms10ur/psp-myristanet:latest
     container_name: psp-portal
     ports:
-      - "5000:5000"
+      - "5001:5001"
     volumes:
       - ./downloads:/app/downloads
       - ./instance:/app/instance
       - ./uploads:/app/uploads
-      - ./images:/app/static/images
+      - ./images:/app/images
     environment:
-      - FLASK_ENV=production
+      # Güvenlik
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-this-in-production}
+
+      # Sunucu Ayarları
+      - PORT=${PORT:-5001}
+      - FLASK_ENV=${FLASK_ENV:-production}
+
+      # Renk Teması
+      - COLOR_PRIMARY=${COLOR_PRIMARY:-#252A34}
+      - COLOR_SECONDARY=${COLOR_SECONDARY:-#08D9D6}
+      - COLOR_ACCENT=${COLOR_ACCENT:-#FF2E63}
+      - COLOR_LIGHT=${COLOR_LIGHT:-#EAEAEA}
+
+      # Dil ve Optimizasyon
+      - DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE:-tr}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - MAX_CONTENT_LENGTH=${MAX_CONTENT_LENGTH:-500}
+
+      # PSP Optimizasyonu
+      - PSP_RESOLUTION_WIDTH=${PSP_RESOLUTION_WIDTH:-480}
+      - PSP_RESOLUTION_HEIGHT=${PSP_RESOLUTION_HEIGHT:-272}
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5001/header || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     labels:
       - "casaos.name=PSP Portal"
-      - "casaos.description=PSP compatible web portal with administration"
+      - "casaos.description=PSP compatible web portal with administration and multilingual support"
       - "casaos.icon=https://raw.githubusercontent.com/gms10ur/psp-myristanet/main/images/pdc.png"
       - "casaos.category=Media"
-      - "casaos.port=5000"
+      - "casaos.port=5001"

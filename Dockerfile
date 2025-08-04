@@ -14,11 +14,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Uygulama dosyalarını kopyala
 COPY . .
 
-# SQLite veritabanı dizinini oluştur
-RUN mkdir -p /app/instance
+# SQLite veritabanı ve upload dizinlerini oluştur
+RUN mkdir -p /app/instance /app/uploads /app/downloads
 
-# Port 5000'i aç
-EXPOSE 5000
+# Port 5001'i aç
+EXPOSE 5001
 
 # Uygulamayı başlat
 CMD ["python", "app.py"]

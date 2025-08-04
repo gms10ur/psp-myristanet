@@ -1,6 +1,43 @@
-# PSP Portal - Modern Web Portal for PlayStation Portable
+# PSP MyristaNet Portal
 
-PSP cihazları için modern, yönetilebilir web portalı. Bu proje, PSP'nin kendi tarayıcısında çalışabilen hafif bir portal ile desktop üzerinden kolay yönetim imkanı sunar.
+Modern PSP uyumlu web portalı - Flask tabanlı, çoklu dil desteği ile.
+
+## 🚀 Özellikler
+
+- ✅ **PSP NetFront Browser Optimizasyonu** (480×272 çözünürlük)
+- ✅ **Çoklu Dil Desteği** (Türkçe/İngilizce) - Görsellerle birlikte
+- ✅ **9 Kategori Sistemi** (Firmware, Games, Plugins, Tools, vs.)
+- ✅ **Admin Paneli** - İçerik yönetimi
+- ✅ **Docker Desteği** - Kolay kurulum
+- ✅ **CasaOS Uyumlu** - Ev sunucuları için
+- ✅ **Responsive Tasarım** - PSP frame sistemi
+
+## 🐳 Docker ile Hızlı Başlangıç
+
+### Docker Hub'dan Çalıştırma:
+
+```bash
+docker run -d
+  --name psp-portal
+  -p 5001:5001
+  -v ./data/instance:/app/instance
+  -v ./data/downloads:/app/downloads
+  -v ./data/uploads:/app/uploads
+  gms10ur/psp-myristanet:latest
+```
+
+### Docker Compose ile:
+
+```bash
+# Repo'yu klonla
+git clone https://github.com/gms10ur/psp-myristanet.git
+cd psp-myristanet
+
+# Servisi başlat
+docker-compose up -d
+```
+
+Portal şu adreste erişilebilir: `http://localhost:5001`
 
 ## 🚀 Özellikler
 

@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}{{ t(category.slug) }} - {{
 t('title') }}{% endblock %} {% block content %}
-<div class="psp-header">{{ t(category.slug) }}</div>
+<div class="category-title">{{ t(category.slug) }}</div>
 <hr class="psp-separator" />
 
 {% if entries %} {% if category.slug == 'games' %}

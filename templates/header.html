@@ -54,22 +54,30 @@
       }
 
       .lang-switcher {
-        display: inline;
-        font-size: 8px;
-        margin-left: 5px;
+        display: inline-block;
+        font-size: 9px;
+        margin-left: 2px;
+        vertical-align: middle;
+        height: 16px;
+        line-height: 16px;
       }
 
       .lang-link {
-        color: {{ colors.primary }};
+        color: {{ colors.light }};
         text-decoration: none;
-        padding: 1px 3px;
+        padding: 1px 4px;
         border: 1px solid {{ colors.primary }};
-        background-color: transparent;
+        background-color: {{ colors.primary }};
+        font-size: 9px;
+        height: 14px;
+        line-height: 14px;
+        display: inline-block;
+        vertical-align: middle;
       }
 
       .lang-link:hover {
-        background-color: {{ colors.primary }};
-        color: {{ colors.secondary }};
+        background-color: {{ colors.accent }};
+        border-color: {{ colors.accent }};
       }
 
       .lang-switcher a {

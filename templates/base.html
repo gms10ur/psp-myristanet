@@ -58,9 +58,10 @@
       }
 
       .category-item img {
-        width: 90%; /* Resmi %90 boyutuna çıkar, daha az boşluk */
-        height: 90%; /* Yüksekliği de %90 yap */
-        max-height: none; /* Maximum yükseklik sınırını kaldır */
+        width: 70%; /* Daha küçük boyut - özellikle büyük PNG'ler için */
+        height: 70%; /* Yüksekliği de %70 yap */
+        max-width: 80px; /* Maksimum genişlik sınırı */
+        max-height: 50px; /* Maksimum yükseklik sınırı */
         display: block;
         margin: auto; /* Ortala */
         object-fit: contain; /* Resmin tamamını göster, kırpma */
@@ -109,6 +110,18 @@
         color: {{ colors.light }};
       }
 
+      /* PSP Category title - extra small */
+      .category-title {
+        text-align: center;
+        font-size: 9px !important;
+        padding: 1px;
+        margin: 1px 0;
+        color: {{ colors.light }};
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
       .psp-separator {
         border: none;
         border-top: 1px solid {{ colors.secondary }};
@@ -119,32 +132,36 @@
       /* Games table for PSP */
       .games-table {
         width: 100%;
-        max-width: 450px;
+        max-width: 470px;
         margin: 0 auto;
         border-collapse: collapse;
-        font-size: 10px;
+        font-size: 8px;
         background-color: rgba(8, 217, 214, 0.1);
-        border: 2px solid {{ colors.secondary }};
+        border: 1px solid {{ colors.secondary }};
       }
 
       .games-table th,
       .games-table td {
         border: 1px solid {{ colors.secondary }};
-        padding: 2px;
+        padding: 1px;
         text-align: center;
         vertical-align: middle;
+        line-height: 1.1;
       }
 
       .games-table th {
         background-color: {{ colors.secondary }};
         color: {{ colors.primary }};
         font-weight: bold;
-        font-size: 9px;
+        font-size: 7px;
+        height: 12px;
       }
 
       .games-table td {
         background-color: rgba(8, 217, 214, 0.1);
         color: {{ colors.light }};
+        font-size: 7px;
+        height: 14px;
       }
 
       .games-table img {
