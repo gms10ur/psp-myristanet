@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{{ t('title') }}{% endblock %}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        background-color: {{ colors.secondary }};
+        color: {{ colors.light }};
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .header {
+        background-color: {{ colors.secondary }};
+        padding: 5px;
+        border-bottom: 1px solid {{ colors.light }};
+      }
+
+      .header table {
+        width: 480px;
+        border-collapse: collapse;
+      }
+
+      .header .title {
+        color: {{ colors.light }};
+        font-weight: bold;
+      }
+
+      .header .nav {
+        text-align: right;
+      }
+
+      .header button {
+        height: 16px;
+        width: 40px;
+        font-size: 10px;
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+        border: 1px solid {{ colors.primary }};
+      }
+
+      .main-content {
+        background: linear-gradient(135deg, {{ colors.primary }}, {{ colors.light }});
+        min-height: 400px;
+        padding: 10px;
+        text-align: center;
+        color: {{ colors.secondary }};
+      }
+
+      .footer {
+        background-color: {{ colors.secondary }};
+        height: 18px;
+        border-top: 1px solid white;
+      }
+
+      .category-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .category-item {
+        display: inline-block;
+        margin: 5px;
+      }
+
+      .category-item img {
+        width: 144px;
+        height: 80px;
+        border: none;
+      }
+
+      .lang-switcher {
+        position: absolute;
+        top: 5px;
+        right: 150px;
+        font-size: 10px;
+      }
+
+      .lang-switcher a {
+        color: {{ colors.light }};
+        text-decoration: none;
+        margin: 0 2px;
+      }
+
+      .lang-switcher a:hover {
+        color: {{ colors.primary }};
+      }
+
+      .flash-messages {
+        margin: 10px 0;
+      }
+
+      .flash-success {
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+        padding: 10px;
+        margin: 5px;
+        border-radius: 4px;
+      }
+
+      .flash-error {
+        background-color: {{ colors.accent }};
+        color: {{ colors.light }};
+        padding: 10px;
+        margin: 5px;
+        border-radius: 4px;
+      }
+
+      /* Games kategori tablosu için özel stil */
+      .games-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        background-color: rgba(8, 217, 214, 0.1);
+        border: 2px solid {{ colors.primary }};
+      }
+
+      .games-table th,
+      .games-table td {
+        border: 1px solid {{ colors.primary }};
+        padding: 8px;
+        text-align: center;
+      }
+
+      .games-table th {
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+        font-weight: bold;
+      }
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 8px;
+        text-align: center;
+      }
+
+      .games-table th {
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+        font-weight: bold;
+      }
+
+      .games-table img {
+        max-width: 60px;
+        max-height: 60px;
+      }
+
+      .download-link img {
+        width: 20px;
+        height: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div class="lang-switcher">
+        <a href="{{ url_for('set_language', lang='tr') }}">TR</a> |
+        <a href="{{ url_for('set_language', lang='en') }}">EN</a>
+      </div>
+      <table>
+        <tr>
+          <td class="title">: {{ t('title') }}</td>
+          <td class="nav">
+            <button onclick="window.location.href='{{ url_for('main') }}'">
+              {{ t('home') }}
+            </button>
+            {% if request.endpoint != 'admin' %}
+            <button onclick="window.location.href='{{ url_for('admin') }}'">
+              {{ t('admin') }}
+            </button>
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %} {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <div class="footer"></div>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PSP Portal - MyristaNet</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=480, initial-scale=1.0">
+    <style>
+        /* PSP Browser optimizations */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 480px;
+            height: 272px;
+            max-width: 480px;
+            max-height: 272px;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+        }
+        
+        frameset {
+            width: 480px;
+            height: 272px;
+        }
+    </style>
+</head>
+<!-- PSP optimized frame layout: 35px header + 212px main + 25px footer = 272px total -->
+<frameset rows="35,*,25" framespacing="0" border="0">
+    <frame name="header" src="{{ url_for('header_frame') }}" frameborder="0" marginwidth="0" marginheight="0" noresize>
+    <frame name="main" src="{{ url_for('main') }}" frameborder="0" marginwidth="0" marginheight="0" noresize>
+    <frame name="footer" src="{{ url_for('footer_frame') }}" frameborder="0" marginwidth="0" marginheight="0" noresize>
+    <noframes>
+        <body style="background-color: #252A34; color: #EAEAEA; text-align: center; padding: 20px;">
+            <h2>PSP Portal</h2>
+            <p>Bu portal PSP tarayıcısı için optimize edilmiştir ve frame desteği gerektirir.</p>
+            <p><a href="{{ url_for('main') }}" style="color: #08D9D6;">Buraya tıklayarak devam edin</a></p>
+        </body>
+    </noframes>
+</frameset>
+</html>

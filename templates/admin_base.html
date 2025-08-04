@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      {% block title %}{{ t('admin') }} - {{ t('title') }}{% endblock %}
+    </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        background-color: {{ colors.secondary }};
+        color: {{ colors.light }};
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .admin-header {
+        background: linear-gradient(135deg, {{ colors.primary }}, {{ colors.light }});
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        text-align: center;
+        border: 2px solid {{ colors.primary }};
+      }
+
+      .admin-header h1 {
+        margin: 0;
+        color: {{ colors.secondary }};
+      }
+
+      .admin-nav {
+        margin-bottom: 20px;
+      }
+
+      .admin-nav a {
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-right: 10px;
+        display: inline-block;
+      }
+
+      .admin-nav a:hover {
+        background-color: {{ colors.accent }};
+      }
+
+      .content-box {
+        background-color: rgba(8, 217, 214, 0.1);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid {{ colors.primary }};
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      th,
+      td {
+        border: 1px solid {{ colors.primary }};
+        padding: 10px;
+        text-align: left;
+      }
+
+      th {
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+        font-weight: bold;
+      }
+
+      .btn {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        margin: 2px;
+      }
+
+      .btn-primary {
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+      }
+      .btn-success {
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+      }
+      .btn-danger {
+        background-color: {{ colors.accent }};
+        color: {{ colors.light }};
+      }
+      .btn-secondary {
+        background-color: {{ colors.light }};
+        color: {{ colors.secondary }};
+      }
+        color: {{ colors.secondary }};
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: {{ colors.light }};
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid {{ colors.primary }};
+        border-radius: 4px;
+        color: {{ colors.secondary }};
+        background-color: {{ colors.light }};
+        box-sizing: border-box;
+      }
+
+      .flash-messages {
+        margin-bottom: 20px;
+      }
+
+      .flash-success {
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+      }
+
+      .flash-error {
+        background-color: {{ colors.accent }};
+        color: {{ colors.light }};
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+      }
+
+      .lang-switcher {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 12px;
+      }
+
+      .lang-switcher a {
+        color: white;
+        text-decoration: none;
+        margin: 0 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lang-switcher">
+      <a href="{{ url_for('set_language', lang='tr') }}">TR</a> |
+      <a href="{{ url_for('set_language', lang='en') }}">EN</a>
+    </div>
+
+    <div class="admin-header">
+      <h1>{{ t('admin') }} - {{ t('title') }}</h1>
+    </div>
+
+    <div class="admin-nav">
+      <a href="{{ url_for('admin') }}">{{ t('admin') }}</a>
+      <a href="{{ url_for('admin_entries') }}">Tüm Girişler</a>
+      <a href="{{ url_for('admin_add_entry') }}">{{ t('add_entry') }}</a>
+      <a href="{{ url_for('index') }}" target="_blank">Portal Ana Sayfa</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+      <div class="flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %} {% block content %}{% endblock %}
+  </body>
+</html>

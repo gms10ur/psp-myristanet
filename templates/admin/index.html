@@ -1,0 +1,51 @@
+{% extends "admin_base.html" %} {% block content %}
+<div class="content-box">
+  <h2>Yönetim Paneli</h2>
+  <div style="margin-bottom: 20px">
+    <form
+      action="{{ url_for('admin_import_legacy') }}"
+      method="post"
+      style="display: inline"
+    >
+      <button
+        type="submit"
+        class="btn btn-secondary"
+        onclick="return confirm('Bu işlem mevcut verilerin üzerine yazabilir. Devam etmek istiyor musunuz?');"
+      >
+        Legacy HTML Verilerini İçe Aktar
+      </button>
+    </form>
+    <span style="margin-left: 10px; color: {{ colors.light }};"
+      >Eski HTML dosyalarından verileri SQL veritabanına aktarır</span
+    >
+  </div>
+</div>
+
+<div class="content-box">
+  <h2>Kategori Yönetimi</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>{{ t('category') }}</th>
+        <th>Giriş Sayısı</th>
+        <th>İşlemler</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for category in categories %}
+      <tr>
+        <td>{{ t(category.slug) }}</td>
+        <td>{{ category.entries|length }}</td>
+        <td>
+          <a
+            href="{{ url_for('admin_entries', category_id=category.id) }}"
+            class="btn btn-primary"
+            >Girişleri Görüntüle</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

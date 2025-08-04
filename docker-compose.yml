@@ -1,0 +1,22 @@
+name: psp-portal
+services:
+  app:
+    build: .
+    container_name: psp-portal
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./downloads:/app/downloads
+      - ./instance:/app/instance
+      - ./uploads:/app/uploads
+      - ./images:/app/static/images
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-this-in-production}
+    restart: unless-stopped
+    labels:
+      - "casaos.name=PSP Portal"
+      - "casaos.description=PSP compatible web portal with administration"
+      - "casaos.icon=https://raw.githubusercontent.com/gms10ur/psp-myristanet/main/images/pdc.png"
+      - "casaos.category=Media"
+      - "casaos.port=5000"

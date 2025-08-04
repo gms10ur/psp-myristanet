@@ -1,0 +1,51 @@
+{% extends "admin_base.html" %}
+
+{% block title %}{{ t('admin') }} - Girişler{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <h2>Girişler {% if selected_category %}({{ t(selected_category.slug) }}){% endif %}</h2>
+    
+    <div style="margin-bottom: 20px;">
+        <label>Kategori Filtresi:</label>
+        <select onchange="window.location.href='{{ url_for('admin_entries') }}?category_id=' + this.value" class="form-control" style="width: 200px; display: inline-block; margin-left: 10px;">
+            <option value="">Tümü</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if selected_category and selected_category.id == category.id %}selected{% endif %}>
+                    {{ t(category.slug) }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Başlık</th>
+                <th>{{ t('category') }}</th>
+                <th>{{ t('size') }}</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td>{{ entry.title }}</td>
+                <td>{{ t(entry.category.slug) }}</td>
+                <td>{{ entry.file_size or 'N/A' }}</td>
+                <td>
+                    <a href="{{ url_for('admin_edit_entry', entry_id=entry.id) }}" class="btn btn-primary">{{ t('edit') }}</a>
+                    <form method="POST" action="{{ url_for('admin_delete_entry', entry_id=entry.id) }}" style="display: inline;" onsubmit="return confirm('Bu girişi silmek istediğinizden emin misiniz?')">
+                        <button type="submit" class="btn btn-danger">{{ t('delete') }}</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% if not entries %}
+        <p style="text-align: center; margin: 20px;">Henüz giriş bulunmuyor.</p>
+    {% endif %}
+</div>
+{% endblock %}

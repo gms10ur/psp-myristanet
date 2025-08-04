@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        background-color: {{ colors.secondary }};
+        color: {{ colors.light }};
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 2px 5px; /* Reduced for PSP */
+        font-size: 11px; /* Smaller for PSP */
+        width: 480px;
+        max-width: 480px;
+        height: 30px; /* Fixed height for PSP header */
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        height: 100%;
+      }
+
+      .title {
+        color: {{ colors.light }};
+        font-weight: bold;
+        vertical-align: middle;
+      }
+
+      .nav {
+        text-align: right;
+        vertical-align: middle;
+      }
+
+      button {
+        height: 16px; /* Smaller for PSP */
+        width: 35px; /* Smaller for PSP */
+        font-size: 9px; /* Smaller for PSP */
+        margin-left: 2px;
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+        border: 1px solid {{ colors.primary }};
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: {{ colors.accent }};
+        border-color: {{ colors.accent }};
+      }
+
+      .lang-switcher {
+        display: inline;
+        font-size: 8px;
+        margin-left: 5px;
+      }
+
+      .lang-link {
+        color: {{ colors.primary }};
+        text-decoration: none;
+        padding: 1px 3px;
+        border: 1px solid {{ colors.primary }};
+        background-color: transparent;
+      }
+
+      .lang-link:hover {
+        background-color: {{ colors.primary }};
+        color: {{ colors.secondary }};
+      }
+
+      .lang-switcher a {
+        color: {{ colors.light }};
+        text-decoration: none;
+        margin: 0 2px;
+      }
+
+      .lang-switcher a:hover {
+        color: {{ colors.primary }};
+      }
+    </style>
+  </head>
+    <body>
+    <table>
+      <tr>
+        <td class="title">MyristaNet PSP Portal</td>
+        <td class="nav">
+          <button onclick="window.parent.location='{{ url_for('main') }}'">
+            {{ t('home') }}
+          </button>
+          <span class="lang-switcher">
+            <a 
+              href="{{ url_for('set_language', lang='en' if lang == 'tr' else 'tr') }}" 
+              class="lang-link"
+              onclick="window.parent.location=this.href; return false;"
+            >
+              {{ 'EN' if lang == 'tr' else 'TR' }}
+            </a>
+          </span>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+</html>

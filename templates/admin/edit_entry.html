@@ -1,0 +1,46 @@
+{% extends "admin_base.html" %}
+
+{% block title %}{{ t('edit_entry') }} - {{ t('admin') }}{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <h2>{{ t('edit_entry') }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Başlık:</label>
+            <input type="text" name="title" value="{{ entry.title }}" required class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label>{{ t('description') }}:</label>
+            <textarea name="description" rows="3" class="form-control">{{ entry.description or '' }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>{{ t('category') }}:</label>
+            <select name="category_id" required class="form-control">
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id == entry.category_id %}selected{% endif %}>{{ t(category.slug) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Mevcut Dosya:</label>
+            <p style="color: {{ colors.light }};">{{ entry.file_path }} ({{ entry.file_size }})</p>
+        </div>
+        
+        <div class="form-group">
+            <label>Yeni Dosya (opsiyonel):</label>
+            <input type="file" name="file" class="form-control">
+            <small style="color: {{ colors.light }};">Yeni dosya yüklemezseniz mevcut dosya korunur</small>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit" class="btn btn-success">{{ t('save') }}</button>
+            <a href="{{ url_for('admin_entries') }}" class="btn btn-secondary">{{ t('cancel') }}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

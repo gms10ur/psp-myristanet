@@ -1,0 +1,210 @@
+{% extends "base.html" %} {% block title %}{{ t(category.slug) }} - {{
+t('title') }}{% endblock %} {% block content %}
+<style>
+  /* PSP optimized category page */
+  .psp-category-header {
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px;
+    margin: 0;
+    color: {{ colors.light }};
+    background-color: rgba(8, 217, 214, 0.2);
+  }
+
+  .psp-separator {
+    border: none;
+    border-top: 1px solid {{ colors.primary }};
+    margin: 2px 0;
+  }
+
+  /* Games table for PSP */
+  .games-table {
+    width: 100%;
+    max-width: 470px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    font-size: 10px;
+  }
+
+  .games-table th,
+  .games-table td {
+    border: 1px solid {{ colors.primary }};
+    padding: 2px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .games-table th {
+    background-color: {{ colors.primary }};
+    color: {{ colors.secondary }};
+    font-weight: bold;
+    font-size: 9px;
+  }
+
+  .games-table td {
+    background-color: rgba(8, 217, 214, 0.1);
+    color: {{ colors.light }};
+  }
+
+  .games-table img {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* List view for other categories */
+  .entry-list {
+    max-width: 470px;
+    margin: 0 auto;
+    padding: 2px;
+  }
+
+  .entry-item {
+    display: flex;
+    align-items: center;
+    margin: 3px 0;
+    padding: 3px;
+    background-color: rgba(8, 217, 214, 0.1);
+    border: 1px solid {{ colors.primary }};
+    border-radius: 2px;
+    font-size: 10px;
+  }
+
+  .entry-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    flex-shrink: 0;
+  }
+
+  .entry-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .entry-title {
+    color: {{ colors.light }};
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .entry-description {
+    color: {{ colors.light }};
+    font-size: 9px;
+    opacity: 0.8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .entry-download {
+    margin-left: 5px;
+    flex-shrink: 0;
+  }
+
+  .entry-download img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .entry-size {
+    font-size: 8px;
+    color: {{ colors.primary }};
+    margin-left: 3px;
+  }
+
+  /* No entries message */
+  .no-entries {
+    text-align: center;
+    color: {{ colors.light }};
+    font-size: 11px;
+    padding: 20px;
+    opacity: 0.7;
+  }
+</style>
+
+<div class="psp-category-header">{{ t(category.slug) }}</div>
+<hr class="psp-separator" />
+
+{% if entries %} {% if category.slug == 'games' %}
+<!-- Games kategorisi için kompakt tablo -->
+<table class="games-table">
+  <thead>
+    <tr>
+      <th style="width: 30px">Icon</th>
+      <th>Oyun</th>
+      <th style="width: 40px">Boyut</th>
+      <th style="width: 30px">İndir</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in entries %}
+    <tr>
+      <td>
+        {% if entry.icon_path %}
+        <img src="{{ entry.icon_path }}" alt="{{ entry.title }}" />
+        {% else %}
+        <img src="/images/empty_button.png" alt="{{ entry.title }}" />
+        {% endif %}
+      </td>
+      <td style="text-align: left">
+        {{ entry.title[:25] }}{% if entry.title|length > 25 %}...{% endif %}
+      </td>
+      <td>{{ entry.file_size or 'N/A' }}</td>
+      <td>
+        <a href="{{ url_for('download_file', entry_id=entry.id) }}">
+          <img src="/images/dl.png" alt="İndir" />
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<!-- Diğer kategoriler için liste görünümü -->
+<div class="entry-list">
+  {% for entry in entries %}
+  <div class="entry-item">
+    <img
+      src="{% if entry.icon_path %}{{ entry.icon_path }}{% else %}/images/empty_button.png{% endif %}"
+      alt="{{ entry.title }}"
+      class="entry-icon"
+    />
+    <div class="entry-content">
+      <div class="entry-title">
+        {{ entry.title[:30] }}{% if entry.title|length > 30 %}...{% endif %}
+      </div>
+      {% if entry.description %}
+      <div class="entry-description">
+        {{ entry.description[:40] }}{% if entry.description|length > 40 %}...{%
+        endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% if entry.file_size %}
+    <span class="entry-size">{{ entry.file_size }}</span>
+    {% endif %}
+    <a
+      href="{{ url_for('download_file', entry_id=entry.id) }}"
+      class="entry-download"
+    >
+      <img src="/images/dl.png" alt="İndir" />
+    </a>
+  </div>
+  {% endfor %}
+</div>
+{% endif %} {% else %}
+<div class="no-entries">Bu kategoride henüz içerik yok.</div>
+{% endif %}
+
+<hr class="psp-separator" />
+<div style="text-align: center; font-size: 10px; padding: 3px">
+  <a
+    href="javascript:history.back()"
+    style="color: {{ colors.primary }}; text-decoration: none;"
+    >← Geri</a
+  >
+</div>
+{% endblock %}
