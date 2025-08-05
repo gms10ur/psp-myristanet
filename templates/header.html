@@ -26,6 +26,7 @@
         color: {{ colors.light }};
         font-weight: bold;
         vertical-align: middle;
+        padding-left: 10px; /* Yazıyı sağa kaydır */
       }
 
       .nav {
@@ -36,55 +37,16 @@
         line-height: 23px; /* PSP için basit hizalama */
       }
 
-      button {
-        height: 12px; /* Çok küçük */
-        width: 22px; /* Daha küçük - ince header için */
-        font-size: 7px; /* Çok küçük font */
-        margin-left: 2px;
-        margin-top: 1px; /* PSP için manuel hizalama */
-        background-color: {{ colors.primary }};
-        color: {{ colors.light }};
-        border: 1px solid {{ colors.primary }};
-        cursor: pointer;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: center;
-        padding: 0;
-        display: inline-block; /* PSP uyumlu */
-      }
-
-      button:hover {
-        background-color: {{ colors.accent }};
-        border-color: {{ colors.accent }};
-      }
-
-      .lang-switcher {
-        font-size: 9px;
-        margin-left: 2px;
-        display: inline-block;
-        vertical-align: middle;
-      }
-
-      .lang-link {
+      .nav a {
         color: {{ colors.light }};
         text-decoration: none;
-        border: 1px solid {{ colors.primary }};
-        background-color: {{ colors.primary }};
-        font-size: 7px;
-        width: 14px;
-        height: 12px;
-        text-align: center;
-        cursor: pointer;
-        padding: 0;
-        display: inline-block;
-        margin-top: 1px; /* PSP için manuel hizalama */
-        margin-left: 1px;
+        font-size: 8px;
+        font-weight: bold;
+        margin: 0 3px;
       }
 
-      .lang-link:hover {
-        background-color: {{ colors.accent }};
-        border-color: {{ colors.accent }};
+      .nav a:hover {
+        color: {{ colors.accent }};
       }
     </style>
   </head>
@@ -93,18 +55,13 @@
       <tr>
         <td class="title">MyristaNet PSP Portal</td>
         <td class="nav">
-          <button onclick="window.parent.location='{{ url_for('index') }}'">
+          <a href="{{ url_for('index') }}" onclick="window.parent.location=this.href; return false;">
             {{ 'EV' if lang == 'tr' else 'HOME' }}
-          </button>
-          <span class="lang-switcher">
-            <a 
-              href="{{ url_for('set_language', lang='en' if lang == 'tr' else 'tr') }}" 
-              class="lang-link"
-              onclick="window.parent.location=this.href; return false;"
-            >
-              {{ 'EN' if lang == 'tr' else 'TR' }}
-            </a>
-          </span>
+          </a>
+          |
+          <a href="{{ url_for('set_language', lang='en' if lang == 'tr' else 'tr') }}" onclick="window.parent.location=this.href; return false;">
+            {{ 'EN' if lang == 'tr' else 'TR' }}
+          </a>
         </td>
       </tr>
     </table>

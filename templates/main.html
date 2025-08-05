@@ -3,16 +3,16 @@
 <!-- Ortalamak için dış tablo -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr>
-    <td align="center">
-      <!-- Ana içerik tablosu - minimum boşluk -->
-      <table width="420" cellpadding="0" cellspacing="1" border="0">
+    <td align="center" valign="middle">
+      <!-- Ana içerik tablosu - PSP için optimize -->
+      <table width="360" cellpadding="5" cellspacing="0" border="0">
         <tr>
           {% for category in categories %} {% if loop.index0 % 3 == 0 and
           loop.index0 > 0 %}
         </tr>
         <tr>
           {% endif %}
-          <td align="center" width="140">
+          <td align="center" width="120">
             {% if category.slug == 'homebrew' %}
             <a href="https://brew.psp.place/hb/" target="_parent">
               <img
@@ -37,7 +37,7 @@
           <!-- Boş hücreler ekle eğer 3'ün katı değilse -->
           {% if categories|length % 3 != 0 %} {% for i in range(3 -
           (categories|length % 3)) %}
-          <td width="140">&nbsp;</td>
+          <td width="120">&nbsp;</td>
           {% endfor %} {% endif %}
         </tr>
       </table>
