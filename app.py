@@ -293,10 +293,34 @@ def category_detail(slug):
 
 @app.route("/download/<int:entry_id>")
 def download_file(entry_id):
-    entry = Entry.query.get_or_404(entry_id)
-    file_path = os.path.join(app.config["DOWNLOAD_FOLDER"], entry.file_path)
+    import glob
 
-    if os.path.exists(file_path):
+    entry = Entry.query.get_or_404(entry_id)
+
+    # Dosyayı bulmak için sırayla farklı konumları dene
+    possible_paths = [
+        # 1. Downloads klasöründe (yeni yüklenen dosyalar)
+        os.path.join(app.config["DOWNLOAD_FOLDER"], entry.file_path),
+        # 2. CFW klasöründe recursive ara
+        *glob.glob(os.path.join("cfw", "**", entry.file_path), recursive=True),
+        # 3. OFW klasöründe ara
+        os.path.join("xpd", "ofw", entry.file_path),
+        # 4. Seplugins klasöründe recursive ara
+        *glob.glob(os.path.join("seplugins", "**", entry.file_path), recursive=True),
+        # 5. Extras klasöründe ara
+        os.path.join("extras", entry.file_path),
+        # 6. PDC klasöründe ara
+        os.path.join("pdc", entry.file_path),
+    ]
+
+    # İlk bulunan dosyayı kullan
+    file_path = None
+    for path in possible_paths:
+        if path and os.path.exists(path):
+            file_path = path
+            break
+
+    if file_path and os.path.exists(file_path):
         # Games kategorisi için özel download path
         if entry.category.slug == "games":
             download_name = f"ISO/{entry.title}.iso"
@@ -305,7 +329,7 @@ def download_file(entry_id):
 
         return send_file(file_path, as_attachment=True, download_name=download_name)
     else:
-        flash("Dosya bulunamadı", "error")
+        flash(f"Dosya bulunamadı: {entry.file_path}", "error")
         return redirect(url_for("category_detail", slug=entry.category.slug))
 
 
@@ -424,31 +448,31 @@ def admin_delete_entry(entry_id):
 
 @app.route("/admin/import-legacy", methods=["POST"])
 def admin_import_legacy():
-    """Eski HTML dosyalarından verileri içe aktar"""
+    """XPD dosyalarından verileri içe aktar"""
     try:
         import_count = 0
 
-        # Firmware kategorisi için CFW ve OFW dosyalarını birleştir
+        # Firmware kategorisi için CFW ve OFW dosyalarını XPD'lerden al
         firmware_category = Category.query.filter_by(slug="firmware").first()
         if firmware_category:
-            # CFW main.html'den veri al
-            cfw_file = os.path.join("cfw", "main.html")
-            if os.path.exists(cfw_file):
-                import_count += import_from_cfw_html(cfw_file, firmware_category.id)
+            # CFW klasöründeki XPD dosyalarını işle
+            import_count += import_from_xpd_directory(
+                "cfw", firmware_category.id, "CFW"
+            )
 
-            # OFW main.html'den veri al
-            ofw_file = os.path.join("ofw", "main.html")
-            if os.path.exists(ofw_file):
-                import_count += import_from_ofw_html(ofw_file, firmware_category.id)
+            # OFW klasöründeki XPD dosyalarını işle (xpd/ofw altında)
+            import_count += import_from_xpd_directory(
+                "xpd/ofw", firmware_category.id, "OFW"
+            )
 
-        # Demos kategorisi için PDC'den veri al
+        # Demos kategorisi için PDC'den veri al (eski sistem)
         demos_category = Category.query.filter_by(slug="demos").first()
         if demos_category:
             pdc_file = os.path.join("pdc", "main.html")
             if os.path.exists(pdc_file):
                 import_count += import_from_pdc_html(pdc_file, demos_category.id)
 
-        # Plugins kategorisi için seplugins'den veri al
+        # Plugins kategorisi için seplugins'den veri al (eski sistem)
         plugins_category = Category.query.filter_by(slug="plugins").first()
         if plugins_category:
             plugins_file = os.path.join("seplugins", "main.html")
@@ -457,7 +481,7 @@ def admin_import_legacy():
                     plugins_file, plugins_category.id
                 )
 
-        # Extras kategorisi için extras'dan veri al
+        # Extras kategorisi için extras'dan veri al (eski sistem)
         extras_category = Category.query.filter_by(slug="extras").first()
         if extras_category:
             extras_file = os.path.join("extras", "main.html")
@@ -647,6 +671,105 @@ def import_from_extras_html(file_path, category_id):
                     count += 1
     except Exception as e:
         print(f"Extras import error: {e}")
+
+    return count
+
+
+def parse_xpd_file(file_path):
+    """XPD dosyasını parse eder ve içindeki bilgileri döndürür"""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        xpd_data = {}
+        current_section = None
+
+        for line in content.split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+
+            if line.startswith("[") and line.endswith("]"):
+                current_section = line[1:-1]
+                continue
+
+            if "=" in line and current_section:
+                key, value = line.split("=", 1)
+                if current_section not in xpd_data:
+                    xpd_data[current_section] = {}
+                xpd_data[current_section][key] = value
+
+        return xpd_data
+    except Exception as e:
+        print(f"XPD parse error for {file_path}: {e}")
+        return None
+
+
+def import_from_xpd_directory(directory_path, category_id, prefix):
+    """Belirtilen klasördeki tüm XPD dosyalarını içe aktarır"""
+    import glob
+
+    count = 0
+
+    try:
+        # XPD dosyalarını recursive olarak bul
+        xpd_pattern = os.path.join(directory_path, "**", "*.xpd")
+        xpd_files = glob.glob(xpd_pattern, recursive=True)
+
+        for xpd_file in xpd_files:
+            xpd_data = parse_xpd_file(xpd_file)
+            if not xpd_data or "Info" not in xpd_data:
+                continue
+
+            info = xpd_data["Info"]
+            desc = info.get("Desc", "Unknown")
+            size = info.get("Size", "N/A")
+            code = info.get("Code", "")
+
+            # Dosya yolunu belirle (XPD dosyasının kendisi)
+            file_name = os.path.basename(xpd_file)
+
+            # Başlığı düzenle
+            title = f"{prefix}: {desc}"
+
+            # Açıklama oluştur
+            description = f"{prefix} - {desc}"
+            if code:
+                description += f" (Kod: {code})"
+
+            # XPD dosyasındaki gerçek download linkini de açıklamaya ekle
+            if "File" in xpd_data and "C" in xpd_data["File"]:
+                real_download_url = xpd_data["File"]["C"]
+                description += f"\nGerçek dosya: {real_download_url}"
+
+            # Size bilgisini düzenle
+            if size != "N/A" and size.isdigit():
+                size_kb = int(size)
+                if size_kb > 1024:
+                    size_display = f"{size_kb / 1024:.1f} MB"
+                else:
+                    size_display = f"{size_kb} KB"
+            else:
+                size_display = size
+
+            # Zaten var mı kontrol et
+            existing = Entry.query.filter_by(title=title).first()
+            if not existing:
+                entry = Entry(
+                    title=title,
+                    description=description,
+                    file_path=file_name,  # XPD dosyası artık downloads klasöründe
+                    file_size=size_display,
+                    category_id=category_id,
+                )
+                db.session.add(entry)
+                count += 1
+                print(f"Added: {title}")
+            else:
+                print(f"Skipped (exists): {title}")
+
+    except Exception as e:
+        print(f"XPD directory import error for {directory_path}: {e}")
 
     return count
 

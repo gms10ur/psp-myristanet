@@ -4,8 +4,8 @@ Desc=NPDRM Free Mod v7.3
 Size=18
 Code=../../seplugins
 FName=npdrm_free_mod.prx
-NPage=HTTP://psp.lusidgames.com/seplugins/download3.xpd
+NPage=HTTP://psp.myrista.net/seplugins/download3.xpd
 
 [File]
-C=HTTP://psp.lusidgames.com/seplugins/npdrm_free_mod.prx
+C=HTTP://psp.myrista.net/seplugins/npdrm_free_mod.prx
 

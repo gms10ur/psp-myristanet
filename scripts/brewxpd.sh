@@ -9,10 +9,10 @@
 mode="brew"
 
 #urlbase is the http path to the folder containing the game folders
-urlbase="http://psp.lusidgames.com/xpd"
+urlbase="http://psp.myrista.net/xpd"
 
 #xpdbase is the http path to the xpd files (used for multi-part xpd files)
-xpdbase="http://psp.lusidgames.com/xpd/$(basename $PWD)"
+xpdbase="http://psp.myrista.net/xpd/$(basename $PWD)"
 
 curr=$PWD
 titledb="$(dirname -- $( readlink -f -- $0; );)/titledb.txt"

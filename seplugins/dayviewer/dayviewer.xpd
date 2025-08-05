@@ -5,7 +5,7 @@ Size=22
 Code=../../seplugins
 FName=dayviewer.prx
 
-NPage=HTTP://psp.lusidgames.com/seplugins/dayviewer/dayviewer_config.xpd
+NPage=HTTP://psp.myrista.net/seplugins/dayviewer/dayviewer_config.xpd
 
 [File]
-C=HTTP://psp.lusidgames.com/seplugins/dayviewer/dayviewer.prx
+C=HTTP://psp.myrista.net/seplugins/dayviewer/dayviewer.prx

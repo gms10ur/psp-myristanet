@@ -7,6 +7,6 @@ FName=EBOOT.PBP
 AName=data.zip
 
 [File]
-C=http://psp.lusidgames.com/xpd/webinstaller/EBOOT.PBP
-A=http://psp.lusidgames.com/extras/pspcomics_app/data.zip
+C=http://psp.myrista.net/xpd/webinstaller/EBOOT.PBP
+A=http://psp.myrista.net/extras/pspcomics_app/data.zip
 

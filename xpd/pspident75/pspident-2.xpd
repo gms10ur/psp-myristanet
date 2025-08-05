@@ -5,9 +5,9 @@ Size=100
 Code=pspident
 FName=kumdman.prx
 AName=README_RU.txt
-NPage=http://psp.lusidgames.com/xpd/pspident/pspident-3.xpd
+NPage=http://psp.myrista.net/xpd/pspident/pspident-3.xpd
 
 [File]
-C=http://psp.lusidgames.com/xpd/pspident/kumdman.prx
-A=http://psp.lusidgames.com/xpd/pspident/README_RU.txt
+C=http://psp.myrista.net/xpd/pspident/kumdman.prx
+A=http://psp.myrista.net/xpd/pspident/README_RU.txt
 

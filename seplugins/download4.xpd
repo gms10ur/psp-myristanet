@@ -4,7 +4,7 @@ Desc=POPS.TXT
 Size=1
 Code=../../seplugins
 FName=POPS.TXT
-NPage=HTTP://psp.lusidgames.com/seplugins/download5.xpd
+NPage=HTTP://psp.myrista.net/seplugins/download5.xpd
 
 [File]
-C=HTTP://psp.lusidgames.com/seplugins/POPS.TXT
+C=HTTP://psp.myrista.net/seplugins/POPS.TXT

@@ -7,5 +7,5 @@ FName=EBOOT.PBP
 AName=data.zip
 
 [File]
-C=http://psp.lusidgames.com/cfw/ark4-latest/EBOOT.PBP
-A=http://psp.lusidgames.com/cfw/ark4-latest/data.zip
+C=http://psp.myrista.net/cfw/ark4-latest/EBOOT.PBP
+A=http://psp.myrista.net/cfw/ark4-latest/data.zip
