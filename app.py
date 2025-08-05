@@ -14,19 +14,24 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
+# .env dosyasını yükle
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    # python-dotenv yoksa varsayılan değerleri kullan
+    pass
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-key-change-this")
 
-# Renk paleti konfigürasyonu
+# Renk paleti konfigürasyonu (hardcoded)
 COLOR_PALETTE = {
-    "primary": os.environ.get(
-        "COLOR_PRIMARY", "#252A34"
-    ),  # Ana renk (koyu gri) - eski secondary
-    "secondary": os.environ.get(
-        "COLOR_SECONDARY", "#08D9D6"
-    ),  # İkincil renk (turkuaz) - eski primary
-    "accent": os.environ.get("COLOR_ACCENT", "#FF2E63"),  # Vurgu rengi (pembe-kırmızı)
-    "light": os.environ.get("COLOR_LIGHT", "#EAEAEA"),  # Açık renk (açık gri)
+    "primary": "#112D4E",  # Ana renk (koyu gri-mavi)
+    "secondary": "#3F72AF",  # İkincil renk (orta gri-mavi)
+    "accent": "#DBE2EF",  # Vurgu rengi (açık gri-mavi)
+    "light": "#F9F7F7",  # Açık renk (çok açık gri)
 }
 
 # Veritabanı dosyasının tam yolunu oluştur

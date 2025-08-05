@@ -1,29 +1,47 @@
 {% extends "base.html" %} {% block content %}
-<div class="psp-header">PSP uyumlu indirmeler ve bağlantılar</div>
-<hr class="psp-separator" />
 
-<div class="category-grid">
-  {% for category in categories %}
-  <div class="category-item">
-    {% if category.slug == 'homebrew' %}
-    <a href="https://brew.psp.place/hb/" target="_parent">
-      <img
-        src="{{ get_localized_icon(category.icon) }}"
-        alt="{{ t(category.slug) }}"
-      />
-    </a>
-    {% else %}
-    <a href="{{ url_for('category_detail', slug=category.slug) }}">
-      <img
-        src="{{ get_localized_icon(category.icon) }}"
-        alt="{{ t(category.slug) }}"
-      />
-    </a>
-    {% endif %}
-  </div>
-  {% endfor %}
-</div>
-
-<hr class="psp-separator" />
-<div class="psp-header">Çeşitli Bağlantılar</div>
+<!-- Ortalamak için dış tablo -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td align="center">
+      <!-- Ana içerik tablosu - minimum boşluk -->
+      <table width="420" cellpadding="0" cellspacing="1" border="0">
+        <tr>
+          {% for category in categories %} {% if loop.index0 % 3 == 0 and
+          loop.index0 > 0 %}
+        </tr>
+        <tr>
+          {% endif %}
+          <td align="center" width="140">
+            {% if category.slug == 'homebrew' %}
+            <a href="https://brew.psp.place/hb/" target="_parent">
+              <img
+                src="{{ get_localized_icon(category.icon) }}"
+                width="100"
+                alt="{{ t(category.slug) }}"
+                border="1"
+              />
+            </a>
+            {% else %}
+            <a href="{{ url_for('category_detail', slug=category.slug) }}">
+              <img
+                src="{{ get_localized_icon(category.icon) }}"
+                width="100"
+                alt="{{ t(category.slug) }}"
+                border="1"
+              />
+            </a>
+            {% endif %}
+          </td>
+          {% endfor %}
+          <!-- Boş hücreler ekle eğer 3'ün katı değilse -->
+          {% if categories|length % 3 != 0 %} {% for i in range(3 -
+          (categories|length % 3)) %}
+          <td width="140">&nbsp;</td>
+          {% endfor %} {% endif %}
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
 {% endblock %}

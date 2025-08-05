@@ -19,53 +19,32 @@
       }
 
       .main-content {
-        background: linear-gradient(135deg, {{ colors.secondary }}, {{ colors.primary }});
+        background-color: {{ colors.primary }}; /* Düz arka plan - PSP uyumlu */
         min-height: 200px;
-        padding: 10px;
+        padding: 1px; /* Minimum padding */
         text-align: center;
         color: {{ colors.light }};
         border-radius: 5px;
         border: 1px solid {{ colors.secondary }};
       }
 
-      /* Category grid styles */
-      .category-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(4, 1fr); /* 4 satır için */
-        gap: 8px; /* Biraz daha fazla boşluk */
-        padding: 8px;
-        max-width: 470px; /* Genişletildi */
-        height: 260px; /* Sabit yükseklik */
-        margin: 0 auto;
+      /* Basit tablo stilleri - PSP uyumlu */
+      table {
+        border-collapse: collapse;
       }
 
-      .category-item {
+      table td {
         text-align: center;
-        background-color: transparent; /* Arka plan şeffaf */
-        border: none; /* Çerçeve kaldırıldı */
-        border-radius: 0; /* Köşe yuvarlaklığı kaldırıldı */
-        padding: 0; /* Padding kaldırıldı */
-        transition: opacity 0.2s; /* Hover efektini opacity ile değiştirdik */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        vertical-align: middle;
+        padding: 3px;
+        height: 60px;
       }
 
-      .category-item:hover {
-        opacity: 0.8; /* Hover'da hafif saydam */
-      }
-
-      .category-item img {
-        width: 70%; /* Daha küçük boyut - özellikle büyük PNG'ler için */
-        height: 70%; /* Yüksekliği de %70 yap */
-        max-width: 80px; /* Maksimum genişlik sınırı */
-        max-height: 50px; /* Maksimum yükseklik sınırı */
+      table img {
         display: block;
-        margin: auto; /* Ortala */
-        object-fit: contain; /* Resmin tamamını göster, kırpma */
-        border-radius: 4px; /* Sadece resme hafif köşe yuvarlaklığı */
+        margin: 0 auto;
+        max-width: 100px;
+        max-height: 45px;
       }
 
       .category-item a {

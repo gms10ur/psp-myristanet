@@ -26,7 +26,7 @@
       }
 
       .footer-content a {
-        color: {{ colors.primary }};
+        color: {{ colors.light }};
         text-decoration: none;
         margin: 0 5px;
       }
@@ -42,14 +42,23 @@
   </head>
   <body>
     <div class="footer-content">
-      <span style="font-size: 8px; opacity: 0.6"
-        >✕: Enter, ☐+Analog: Scroll</span
+      <span
+        style="font-size: 10px; font-weight: bold; opacity: 0.8; color: {{ colors.light }}"
+        >&#9447: Enter, &#9633;+Analog: Scroll</span
       >
-      <span style="margin: 0 5px">|</span>
-      <span class="copyright">© 2025 MyristaNet PSP Portal</span>
+      <span
+        style="margin: 0 5px; font-size: 10px; font-weight: bold; color: {{ colors.light }}"
+        >|</span
+      >
+      <span
+        class="copyright"
+        style="font-size: 10px; font-weight: bold; color: {{ colors.light }}"
+        >© 2025 MyristaNet PSP Portal</span
+      >
       <a
         href="{{ url_for('admin') }}"
         onclick="window.parent.location=this.href; return false;"
+        style="font-size: 10px; font-weight: bold"
         >Admin</a
       >
     </div>

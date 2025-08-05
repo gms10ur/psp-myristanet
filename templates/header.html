@@ -8,11 +8,11 @@
         color: {{ colors.light }};
         font-family: Arial, sans-serif;
         margin: 0;
-        padding: 2px 5px; /* Reduced for PSP */
-        font-size: 11px; /* Smaller for PSP */
+        padding: 1px 3px; /* Reduced padding */
+        font-size: 10px; /* Smaller for thinner header */
         width: 480px;
         max-width: 480px;
-        height: 30px; /* Fixed height for PSP header */
+        height: 23px; /* Match frame height (25px - 2px for borders) */
         overflow: hidden;
       }
 
@@ -29,23 +29,29 @@
       }
 
       .nav {
-        text-align: right;
-        vertical-align: middle;
-        padding-right: 5px; /* Sol taraftaki title ile aynı mesafe */
+        text-align: center; /* Butonları ortala */
+        padding-right: 0px; /* Sağ boşluk tamamen kaldırıldı */
+        margin-right: 10px; /* Butonları sola kaydır */
+        height: 100%; /* Yükseklik ayarı */
+        line-height: 23px; /* PSP için basit hizalama */
       }
 
       button {
-        height: 16px; /* Smaller for PSP */
-        width: 40px; /* "ana" yazısı için yeterli */
-        font-size: 9px; /* Normal font size */
+        height: 12px; /* Çok küçük */
+        width: 22px; /* Daha küçük - ince header için */
+        font-size: 7px; /* Çok küçük font */
         margin-left: 2px;
+        margin-top: 1px; /* PSP için manuel hizalama */
         background-color: {{ colors.primary }};
-        color: {{ colors.secondary }};
+        color: {{ colors.light }};
         border: 1px solid {{ colors.primary }};
         cursor: pointer;
-        white-space: nowrap; /* Yazının alt satıra geçmesini engelle */
-        overflow: hidden; /* Taşan kısmı gizle */
-        text-overflow: ellipsis; /* ... ile göster */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+        padding: 0;
+        display: inline-block; /* PSP uyumlu */
       }
 
       button:hover {
@@ -54,40 +60,31 @@
       }
 
       .lang-switcher {
-        display: inline-block;
         font-size: 9px;
         margin-left: 2px;
+        display: inline-block;
         vertical-align: middle;
-        height: 16px;
-        line-height: 16px;
       }
 
       .lang-link {
         color: {{ colors.light }};
         text-decoration: none;
-        padding: 1px 4px;
         border: 1px solid {{ colors.primary }};
         background-color: {{ colors.primary }};
-        font-size: 9px;
-        height: 14px;
-        line-height: 14px;
+        font-size: 7px;
+        width: 14px;
+        height: 12px;
+        text-align: center;
+        cursor: pointer;
+        padding: 0;
         display: inline-block;
-        vertical-align: middle;
+        margin-top: 1px; /* PSP için manuel hizalama */
+        margin-left: 1px;
       }
 
       .lang-link:hover {
         background-color: {{ colors.accent }};
         border-color: {{ colors.accent }};
-      }
-
-      .lang-switcher a {
-        color: {{ colors.light }};
-        text-decoration: none;
-        margin: 0 2px;
-      }
-
-      .lang-switcher a:hover {
-        color: {{ colors.primary }};
       }
     </style>
   </head>
