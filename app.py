@@ -85,6 +85,10 @@ TRANSLATIONS = {
         "language": "Dil",
         "import_legacy": "Eski Verileri İçe Aktar",
         "import_success": "Eski veriler başarıyla içe aktarıldı",
+        "psp_model": "PSP Modeli",
+        "firmware_type": "Yazılım Türü",
+        "custom_firmware": "Kırık Yazılım",
+        "original_firmware": "Orijinal Yazılım",
     },
     "en": {
         "title": "PSP Portal",
@@ -118,6 +122,10 @@ TRANSLATIONS = {
         "language": "Language",
         "import_legacy": "Import Legacy Data",
         "import_success": "Legacy data imported successfully",
+        "psp_model": "PSP Model",
+        "firmware_type": "Firmware Type",
+        "custom_firmware": "Custom Firmware",
+        "original_firmware": "Original Firmware",
     },
 }
 
@@ -145,6 +153,11 @@ class Entry(db.Model):
     icon_path = db.Column(db.String(500))
     download_path = db.Column(db.String(500))  # PSP için özel download yolu
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"), nullable=False)
+
+    # Firmware için yeni alanlar
+    psp_model = db.Column(db.String(20))  # 'psp' ya da 'pspgo'
+    firmware_type = db.Column(db.String(10))  # 'cfw' ya da 'ofw'
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
@@ -287,8 +300,47 @@ def main():
 @app.route("/category/<slug>")
 def category_detail(slug):
     category = Category.query.filter_by(slug=slug).first_or_404()
+
+    # Firmware kategorisi için özel işlem
+    if slug == "firmware":
+        return render_template("firmware_model_select.html", category=category)
+
     entries = Entry.query.filter_by(category_id=category.id).all()
     return render_template("category.html", category=category, entries=entries)
+
+
+@app.route("/firmware/type/<psp_model>")
+def firmware_type_select(psp_model):
+    """Firmware türü seçimi - model seçildikten sonra"""
+    if psp_model not in ["psp", "pspgo"]:
+        return redirect(url_for("category_detail", slug="firmware"))
+
+    return render_template("firmware_type_select.html", psp_model=psp_model)
+
+
+@app.route("/firmware/<psp_model>/<firmware_type>")
+def firmware_detail(psp_model, firmware_type):
+    """Firmware listesi - model ve tip filtrelemeli"""
+    category = Category.query.filter_by(slug="firmware").first_or_404()
+
+    # Parametreleri doğrula
+    if psp_model not in ["psp", "pspgo"]:
+        return redirect(url_for("category_detail", slug="firmware"))
+    if firmware_type not in ["cfw", "ofw"]:
+        return redirect(url_for("category_detail", slug="firmware"))
+
+    # Filtrelenmiş entry'leri getir
+    entries = Entry.query.filter_by(
+        category_id=category.id, psp_model=psp_model, firmware_type=firmware_type
+    ).all()
+
+    return render_template(
+        "firmware_list.html",
+        category=category,
+        entries=entries,
+        psp_model=psp_model,
+        firmware_type=firmware_type,
+    )
 
 
 @app.route("/download/<int:entry_id>")
@@ -383,6 +435,12 @@ def admin_add_entry():
                     category_id=request.form["category_id"],
                 )
 
+                # Firmware kategorisi için özel alanlar
+                category = Category.query.get(request.form["category_id"])
+                if category and category.slug == "firmware":
+                    entry.psp_model = request.form.get("psp_model")
+                    entry.firmware_type = request.form.get("firmware_type")
+
                 db.session.add(entry)
                 db.session.commit()
 
@@ -401,6 +459,16 @@ def admin_edit_entry(entry_id):
         entry.title = request.form["title"]
         entry.description = request.form.get("description", "")
         entry.category_id = request.form["category_id"]
+
+        # Firmware kategorisi için özel alanlar
+        category = Category.query.get(request.form["category_id"])
+        if category and category.slug == "firmware":
+            entry.psp_model = request.form.get("psp_model")
+            entry.firmware_type = request.form.get("firmware_type")
+        else:
+            # Firmware kategorisi değilse bu alanları sıfırla
+            entry.psp_model = None
+            entry.firmware_type = None
 
         # Yeni dosya yüklendiyse
         if "file" in request.files:
@@ -503,26 +571,31 @@ def admin_import_legacy():
 
 def import_from_cfw_html(file_path, category_id):
     """CFW HTML dosyasından verileri içe aktar"""
-    # Bu fonksiyon eski CFW main.html dosyasını parse edecek
-    # Şu an basit bir örnek implementasyon
     count = 0
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
-            # Basit regex ile download linklerini bul
             import re
 
             downloads = re.findall(r'<a href="([^"]+\.xpd)"[^>]*>([^<]+)</a>', content)
             for download_url, title in downloads:
-                # Dosya zaten var mı kontrol et
                 existing = Entry.query.filter_by(title=title.strip()).first()
                 if not existing:
+                    # PSP modelini tespit et
+                    psp_model = (
+                        "pspgo"
+                        if "go" in title.lower() or "psp-go" in title.lower()
+                        else "psp"
+                    )
+
                     entry = Entry(
                         title=title.strip(),
                         description=f"CFW dosyası: {title}",
                         file_path=download_url.split("/")[-1],
                         file_size="N/A",
                         category_id=category_id,
+                        psp_model=psp_model,
+                        firmware_type="cfw",
                     )
                     db.session.add(entry)
                     count += 1
@@ -544,12 +617,21 @@ def import_from_ofw_html(file_path, category_id):
             for download_url, title in downloads:
                 existing = Entry.query.filter_by(title=title.strip()).first()
                 if not existing:
+                    # PSP modelini tespit et
+                    psp_model = (
+                        "pspgo"
+                        if "go" in title.lower() or "psp-go" in title.lower()
+                        else "psp"
+                    )
+
                     entry = Entry(
                         title=title.strip(),
                         description=f"OFW dosyası: {title}",
                         file_path=download_url.split("/")[-1],
                         file_size="N/A",
                         category_id=category_id,
+                        psp_model=psp_model,
+                        firmware_type="ofw",
                     )
                     db.session.add(entry)
                     count += 1
@@ -752,6 +834,32 @@ def import_from_xpd_directory(directory_path, category_id, prefix):
             else:
                 size_display = size
 
+            # Firmware kategorisi için PSP model ve tip tespiti
+            psp_model = None
+            firmware_type = None
+
+            # Kategori firmware ise model ve tip belirle
+            category = Category.query.get(category_id)
+            if category and category.slug == "firmware":
+                # Model tespiti (dosya adı veya açıklamaya göre)
+                filename_lower = file_name.lower()
+                desc_lower = desc.lower()
+
+                if (
+                    "go" in filename_lower
+                    or "go" in desc_lower
+                    or "psp-go" in filename_lower
+                ):
+                    psp_model = "pspgo"
+                else:
+                    psp_model = "psp"
+
+                # Tip tespiti
+                if prefix.upper() == "CFW":
+                    firmware_type = "cfw"
+                elif prefix.upper() == "OFW":
+                    firmware_type = "ofw"
+
             # Zaten var mı kontrol et
             existing = Entry.query.filter_by(title=title).first()
             if not existing:
@@ -761,6 +869,8 @@ def import_from_xpd_directory(directory_path, category_id, prefix):
                     file_path=file_name,  # XPD dosyası artık downloads klasöründe
                     file_size=size_display,
                     category_id=category_id,
+                    psp_model=psp_model,
+                    firmware_type=firmware_type,
                 )
                 db.session.add(entry)
                 count += 1

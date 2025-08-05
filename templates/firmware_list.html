@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block title %}{{ t('firmware') }} - {% if psp_model
+== 'pspgo' %}PSP Go{% else %}PSP 1000/2000/3000{% endif %} {% if firmware_type
+== 'cfw' %}Kırık Yazılım{% else %}Orijinal Yazılım{% endif %} - {{ t('title')
+}}{% endblock %} {% block content %}
+
+<div class="category-title" style="color: {{ colors.light }};">
+  {% if psp_model == 'pspgo' %}PSP Go{% else %}PSP 1000/2000/3000{% endif %} -
+  {% if firmware_type == 'cfw' %}Kırık Yazılım{% else %}Orijinal Yazılım{% endif
+  %}
+</div>
+<hr class="psp-separator" />
+
+{% if entries %}
+<!-- PSP Uyumlu Firmware Listesi -->
+<table style="width: 100%; border-collapse: collapse; font-size: 10px">
+  {% for entry in entries %}
+  <tr style="border-bottom: 1px solid {{ colors.secondary }}; padding: 2px 0;">
+    <td style="width: 30px; padding: 2px; text-align: center">
+      <img
+        src="{% if entry.icon_path %}{{ entry.icon_path }}{% else %}{{ get_localized_icon('/images/empty_button.png') }}{% endif %}"
+        alt="{{ entry.title }}"
+        width="24"
+        height="24"
+      />
+    </td>
+    <td style="padding: 2px 5px; color: {{ colors.light }};">
+      <div style="font-weight: bold; font-size: 10px">
+        {{ entry.title[:35] }}{% if entry.title|length > 35 %}...{% endif %}
+      </div>
+      {% if entry.description %}
+      <div style="font-size: 8px; color: {{ colors.light }}; opacity: 0.8;">
+        {{ entry.description[:45] }}{% if entry.description|length > 45 %}...{%
+        endif %}
+      </div>
+      {% endif %}
+    </td>
+    <td
+      style="width: 50px; padding: 2px; text-align: center; font-size: 8px; color: {{ colors.secondary }};"
+    >
+      {% if entry.file_size %}{{ entry.file_size }}{% endif %}
+    </td>
+    <td style="width: 30px; padding: 2px; text-align: center">
+      <a href="{{ url_for('download_file', entry_id=entry.id) }}">
+        <img
+          src="{{ get_localized_icon('/images/dl.png') }}"
+          alt="İndir"
+          width="20"
+          height="20"
+        />
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<div
+  style="text-align: center; color: {{ colors.light }}; font-size: 11px; padding: 20px;"
+>
+  Bu model ve yazılım türü için henüz firmware yok.
+</div>
+{% endif %}
+
+<hr class="psp-separator" />
+<div style="text-align: center; font-size: 10px; padding: 3px">
+  <a
+    href="{{ url_for('category_detail', slug='firmware') }}"
+    style="color: {{ colors.secondary }}; text-decoration: none;"
+    >← Model Seçimine Dön</a
+  >
+</div>
+{% endblock %}

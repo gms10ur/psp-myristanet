@@ -16,12 +16,41 @@ t('admin') }}{% endblock %} {% block content %}
 
     <div class="form-group">
       <label>{{ t('category') }}:</label>
-      <select name="category_id" required class="form-control">
+      <select
+        name="category_id"
+        required
+        class="form-control"
+        id="category-select"
+        onchange="toggleFirmwareFields()"
+      >
         <option value="">Kategori seçin</option>
         {% for category in categories %}
-        <option value="{{ category.id }}">{{ t(category.slug) }}</option>
+        <option value="{{ category.id }}" data-slug="{{ category.slug }}">
+          {{ t(category.slug) }}
+        </option>
         {% endfor %}
       </select>
+    </div>
+
+    <!-- Firmware kategorisi için özel alanlar -->
+    <div id="firmware-fields" style="display: none">
+      <div class="form-group">
+        <label>PSP Modeli:</label>
+        <select name="psp_model" class="form-control">
+          <option value="">Model seçin</option>
+          <option value="psp">PSP 1000/2000/3000</option>
+          <option value="pspgo">PSP Go</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Yazılım Türü:</label>
+        <select name="firmware_type" class="form-control">
+          <option value="">Tür seçin</option>
+          <option value="cfw">Kırık Yazılım (CFW)</option>
+          <option value="ofw">Orijinal Yazılım (OFW)</option>
+        </select>
+      </div>
     </div>
 
     <div class="form-group">
@@ -40,4 +69,22 @@ t('admin') }}{% endblock %} {% block content %}
     </div>
   </form>
 </div>
+
+<script>
+  function toggleFirmwareFields() {
+    const categorySelect = document.getElementById("category-select");
+    const firmwareFields = document.getElementById("firmware-fields");
+    const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+
+    if (selectedOption && selectedOption.dataset.slug === "firmware") {
+      firmwareFields.style.display = "block";
+      document.querySelector('select[name="psp_model"]').required = true;
+      document.querySelector('select[name="firmware_type"]').required = true;
+    } else {
+      firmwareFields.style.display = "none";
+      document.querySelector('select[name="psp_model"]').required = false;
+      document.querySelector('select[name="firmware_type"]').required = false;
+    }
+  }
+</script>
 {% endblock %}

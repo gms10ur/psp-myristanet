@@ -19,11 +19,32 @@
         
         <div class="form-group">
             <label>{{ t('category') }}:</label>
-            <select name="category_id" required class="form-control">
+            <select name="category_id" required class="form-control" id="category-select" onchange="toggleFirmwareFields()">
                 {% for category in categories %}
-                    <option value="{{ category.id }}" {% if category.id == entry.category_id %}selected{% endif %}>{{ t(category.slug) }}</option>
+                    <option value="{{ category.id }}" data-slug="{{ category.slug }}" {% if category.id == entry.category_id %}selected{% endif %}>{{ t(category.slug) }}</option>
                 {% endfor %}
             </select>
+        </div>
+        
+        <!-- Firmware kategorisi için özel alanlar -->
+        <div id="firmware-fields" style="display: {% if entry.category.slug == 'firmware' %}block{% else %}none{% endif %};">
+          <div class="form-group">
+            <label>PSP Modeli:</label>
+            <select name="psp_model" class="form-control">
+              <option value="">Model seçin</option>
+              <option value="psp" {% if entry.psp_model == 'psp' %}selected{% endif %}>PSP 1000/2000/3000</option>
+              <option value="pspgo" {% if entry.psp_model == 'pspgo' %}selected{% endif %}>PSP Go</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Yazılım Türü:</label>
+            <select name="firmware_type" class="form-control">
+              <option value="">Tür seçin</option>
+              <option value="cfw" {% if entry.firmware_type == 'cfw' %}selected{% endif %}>Kırık Yazılım (CFW)</option>
+              <option value="ofw" {% if entry.firmware_type == 'ofw' %}selected{% endif %}>Orijinal Yazılım (OFW)</option>
+            </select>
+          </div>
         </div>
         
         <div class="form-group">
@@ -43,4 +64,22 @@
         </div>
     </form>
 </div>
+
+<script>
+function toggleFirmwareFields() {
+  const categorySelect = document.getElementById('category-select');
+  const firmwareFields = document.getElementById('firmware-fields');
+  const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+  
+  if (selectedOption && selectedOption.dataset.slug === 'firmware') {
+    firmwareFields.style.display = 'block';
+    document.querySelector('select[name="psp_model"]').required = true;
+    document.querySelector('select[name="firmware_type"]').required = true;
+  } else {
+    firmwareFields.style.display = 'none';
+    document.querySelector('select[name="psp_model"]').required = false;
+    document.querySelector('select[name="firmware_type"]').required = false;
+  }
+}
+</script>
 {% endblock %}

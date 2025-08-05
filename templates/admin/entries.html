@@ -24,6 +24,7 @@
                 <th>Başlık</th>
                 <th>{{ t('category') }}</th>
                 <th>{{ t('size') }}</th>
+                <th>Model/Tip</th>
                 <th>İşlemler</th>
             </tr>
         </thead>
@@ -33,6 +34,14 @@
                 <td>{{ entry.title }}</td>
                 <td>{{ t(entry.category.slug) }}</td>
                 <td>{{ entry.file_size or 'N/A' }}</td>
+                <td>
+                    {% if entry.category.slug == 'firmware' %}
+                        {% if entry.psp_model == 'pspgo' %}PSP Go{% else %}PSP{% endif %} - 
+                        {% if entry.firmware_type == 'cfw' %}CFW{% else %}OFW{% endif %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
                 <td>
                     <a href="{{ url_for('admin_edit_entry', entry_id=entry.id) }}" class="btn btn-primary">{{ t('edit') }}</a>
                     <form method="POST" action="{{ url_for('admin_delete_entry', entry_id=entry.id) }}" style="display: inline;" onsubmit="return confirm('Bu girişi silmek istediğinizden emin misiniz?')">

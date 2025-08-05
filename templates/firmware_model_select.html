@@ -1,0 +1,76 @@
+{% extends "base.html" %} {% block title %}{{ t('firmware') }} - PSP Modeli - {{
+t('title') }}{% endblock %} {% block content %}
+
+<div class="category-title">{{ t('firmware') }} - PSP Modeli</div>
+<hr class="psp-separator" />
+
+<!-- PSP Model Seçimi -->
+<div style="text-align: center; margin: 20px 0">
+  <div style="color: {{ colors.light }}; font-size: 14px; margin-bottom: 15px;">
+    <strong>PSP Modelinizi Seçin</strong>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 30px">
+    <!-- PSP 1000/2000/3000 -->
+    <a
+      href="{{ url_for('firmware_type_select', psp_model='psp') }}"
+      style="text-decoration: none; color: inherit"
+    >
+      <div style="display: inline-block; margin: 0 20px; vertical-align: top">
+        <div
+          style="
+            border: 2px solid transparent;
+            padding: 5px;
+            border-radius: 8px;
+          "
+        >
+          <img
+            src="/images/psp.png"
+            width="144"
+            height="80"
+            alt="PSP 1000/2000/3000"
+          />
+        </div>
+        <div
+          style="color: {{ colors.light }}; font-size: 12px; margin-top: 8px;"
+        >
+          PSP 1000/2000/3000
+        </div>
+      </div>
+    </a>
+
+    <!-- PSP Go -->
+    <a
+      href="{{ url_for('firmware_type_select', psp_model='pspgo') }}"
+      style="text-decoration: none; color: inherit"
+    >
+      <div style="display: inline-block; margin: 0 20px; vertical-align: top">
+        <div
+          style="
+            border: 2px solid transparent;
+            padding: 5px;
+            border-radius: 8px;
+          "
+        >
+          <img src="/images/pspgo.png" width="144" height="80" alt="PSP Go" />
+        </div>
+        <div
+          style="color: {{ colors.light }}; font-size: 12px; margin-top: 8px;"
+        >
+          PSP Go
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<hr class="psp-separator" />
+<div style="text-align: center; font-size: 10px; padding: 3px">
+  <a
+    href="javascript:history.back()"
+    style="color: {{ colors.secondary }}; text-decoration: none;"
+    >← Geri</a
+  >
+</div>
+
+{% endblock %}

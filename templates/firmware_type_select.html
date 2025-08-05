@@ -1,0 +1,86 @@
+{% extends "base.html" %} {% block title %}{{ t('firmware') }} - {% if psp_model
+== 'pspgo' %}PSP Go{% else %}PSP 1000/2000/3000{% endif %} - Yazılım Türü - {{
+t('title') }}{% endblock %} {% block content %}
+
+<div class="category-title">
+  {% if psp_model == 'pspgo' %}PSP Go{% else %}PSP 1000/2000/3000{% endif %} -
+  Yazılım Türü
+</div>
+<hr class="psp-separator" />
+
+<!-- Yazılım Türü Seçimi -->
+<div style="text-align: center; margin: 20px 0">
+  <div style="color: {{ colors.light }}; font-size: 14px; margin-bottom: 15px;">
+    <strong>Yazılım Türünü Seçin</strong>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 20px">
+    <!-- Kırık Yazılım (CFW) -->
+    <a
+      href="{{ url_for('firmware_detail', psp_model=psp_model, firmware_type='cfw') }}"
+      style="text-decoration: none; color: inherit"
+    >
+      <div
+        style="
+          display: inline-block;
+          margin: 0 20px;
+          padding: 15px;
+          background-color: rgba(17, 45, 78, 0.3);
+          border-radius: 8px;
+          min-width: 140px;
+          vertical-align: top;
+        "
+      >
+        <div
+          style="color: {{ colors.light }}; font-size: 16px; font-weight: bold;"
+        >
+          Kırık Yazılım
+        </div>
+        <div
+          style="color: {{ colors.light }}; font-size: 11px; margin-top: 5px;"
+        >
+          Custom Firmware (CFW)
+        </div>
+      </div>
+    </a>
+
+    <!-- Orijinal Yazılım (OFW) -->
+    <a
+      href="{{ url_for('firmware_detail', psp_model=psp_model, firmware_type='ofw') }}"
+      style="text-decoration: none; color: inherit"
+    >
+      <div
+        style="
+          display: inline-block;
+          margin: 0 20px;
+          padding: 15px;
+          background-color: rgba(17, 45, 78, 0.3);
+          border-radius: 8px;
+          min-width: 140px;
+          vertical-align: top;
+        "
+      >
+        <div
+          style="color: {{ colors.light }}; font-size: 16px; font-weight: bold;"
+        >
+          Orijinal Yazılım
+        </div>
+        <div
+          style="color: {{ colors.light }}; font-size: 11px; margin-top: 5px;"
+        >
+          Official Firmware (OFW)
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<hr class="psp-separator" />
+<div style="text-align: center; font-size: 10px; padding: 3px">
+  <a
+    href="{{ url_for('category_detail', slug='firmware') }}"
+    style="color: {{ colors.secondary }}; text-decoration: none;"
+    >← Model Seçimine Dön</a
+  >
+</div>
+{% endblock %}

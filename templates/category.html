@@ -4,39 +4,56 @@ t('title') }}{% endblock %} {% block content %}
 <hr class="psp-separator" />
 
 {% if entries %} {% if category.slug == 'games' %}
-<!-- Games kategorisi için kompakt tablo -->
-<table class="games-table">
+<!-- Games kategorisi için PSP uyumlu tablo -->
+<table style="width: 100%; border-collapse: collapse; font-size: 10px">
   <thead>
-    <tr>
-      <th style="width: 30px">Icon</th>
-      <th>Oyun</th>
-      <th style="width: 40px">Boyut</th>
-      <th style="width: 30px">İndir</th>
+    <tr
+      style="background-color: rgba(17, 45, 78, 0.3); color: {{ colors.light }};"
+    >
+      <th style="width: 30px; padding: 2px; text-align: center">Icon</th>
+      <th style="padding: 2px 5px; text-align: left">Oyun</th>
+      <th style="width: 50px; padding: 2px; text-align: center">Boyut</th>
+      <th style="width: 30px; padding: 2px; text-align: center">İndir</th>
     </tr>
   </thead>
   <tbody>
     {% for entry in entries %}
-    <tr>
-      <td>
+    <tr style="border-bottom: 1px solid {{ colors.secondary }};">
+      <td style="padding: 2px; text-align: center">
         {% if entry.icon_path %}
         <img
           src="{{ get_localized_icon(entry.icon_path) }}"
           alt="{{ entry.title }}"
+          width="24"
+          height="24"
         />
         {% else %}
         <img
           src="{{ get_localized_icon('/images/empty_button.png') }}"
           alt="{{ entry.title }}"
+          width="24"
+          height="24"
         />
         {% endif %}
       </td>
-      <td style="text-align: left">
-        {{ entry.title[:25] }}{% if entry.title|length > 25 %}...{% endif %}
+      <td
+        style="padding: 2px 5px; text-align: left; color: {{ colors.light }};"
+      >
+        {{ entry.title[:30] }}{% if entry.title|length > 30 %}...{% endif %}
       </td>
-      <td>{{ entry.file_size or 'N/A' }}</td>
-      <td>
+      <td
+        style="padding: 2px; text-align: center; font-size: 8px; color: {{ colors.secondary }};"
+      >
+        {{ entry.file_size or 'N/A' }}
+      </td>
+      <td style="padding: 2px; text-align: center">
         <a href="{{ url_for('download_file', entry_id=entry.id) }}">
-          <img src="{{ get_localized_icon('/images/dl.png') }}" alt="İndir" />
+          <img
+            src="{{ get_localized_icon('/images/dl.png') }}"
+            alt="İndir"
+            width="20"
+            height="20"
+          />
         </a>
       </td>
     </tr>
@@ -44,40 +61,53 @@ t('title') }}{% endblock %} {% block content %}
   </tbody>
 </table>
 {% else %}
-<!-- Diğer kategoriler için liste görünümü -->
-<div class="entry-list">
+<!-- Diğer kategoriler için PSP uyumlu liste görünümü -->
+<table style="width: 100%; border-collapse: collapse; font-size: 10px">
   {% for entry in entries %}
-  <div class="entry-item">
-    <img
-      src="{% if entry.icon_path %}{{ entry.icon_path }}{% else %}{{ get_localized_icon('/images/empty_button.png') }}{% endif %}"
-      alt="{{ entry.title }}"
-      class="entry-icon"
-    />
-    <div class="entry-content">
-      <div class="entry-title">
-        {{ entry.title[:30] }}{% if entry.title|length > 30 %}...{% endif %}
+  <tr style="border-bottom: 1px solid {{ colors.secondary }}; padding: 2px 0;">
+    <td style="width: 30px; padding: 2px; text-align: center">
+      <img
+        src="{% if entry.icon_path %}{{ entry.icon_path }}{% else %}{{ get_localized_icon('/images/empty_button.png') }}{% endif %}"
+        alt="{{ entry.title }}"
+        width="24"
+        height="24"
+      />
+    </td>
+    <td style="padding: 2px 5px; color: {{ colors.light }};">
+      <div style="font-weight: bold; font-size: 10px">
+        {{ entry.title[:35] }}{% if entry.title|length > 35 %}...{% endif %}
       </div>
       {% if entry.description %}
-      <div class="entry-description">
-        {{ entry.description[:40] }}{% if entry.description|length > 40 %}...{%
+      <div style="font-size: 8px; color: {{ colors.light }}; opacity: 0.8;">
+        {{ entry.description[:45] }}{% if entry.description|length > 45 %}...{%
         endif %}
       </div>
       {% endif %}
-    </div>
-    {% if entry.file_size %}
-    <span class="entry-size">{{ entry.file_size }}</span>
-    {% endif %}
-    <a
-      href="{{ url_for('download_file', entry_id=entry.id) }}"
-      class="entry-download"
+    </td>
+    <td
+      style="width: 50px; padding: 2px; text-align: center; font-size: 8px; color: {{ colors.secondary }};"
     >
-      <img src="{{ get_localized_icon('/images/dl.png') }}" alt="İndir" />
-    </a>
-  </div>
+      {% if entry.file_size %}{{ entry.file_size }}{% endif %}
+    </td>
+    <td style="width: 30px; padding: 2px; text-align: center">
+      <a href="{{ url_for('download_file', entry_id=entry.id) }}">
+        <img
+          src="{{ get_localized_icon('/images/dl.png') }}"
+          alt="İndir"
+          width="20"
+          height="20"
+        />
+      </a>
+    </td>
+  </tr>
   {% endfor %}
-</div>
+</table>
 {% endif %} {% else %}
-<div class="no-entries">Bu kategoride henüz içerik yok.</div>
+<div
+  style="text-align: center; color: {{ colors.light }}; font-size: 11px; padding: 20px;"
+>
+  Bu kategoride henüz içerik yok.
+</div>
 {% endif %}
 
 <hr class="psp-separator" />
